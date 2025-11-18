@@ -1,1 +1,1 @@
-# ricogan.github.io
+# ricogan.github.io?nocache=1
