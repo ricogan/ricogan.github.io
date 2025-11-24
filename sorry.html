@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perdóname mi amor 💔</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background: radial-gradient(circle at top, #2e003e, #6a006e, #000);
+        color: white;
+        font-family: "Segoe UI", "Open Sans", "Helvetica Neue", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        color: #ff99cc;
+        text-shadow: 0 0 15px #ff66b2;
+      }
+
+      .btn-container {
+        margin: 20px 0;
+      }
+
+      button {
+        border: none;
+        border-radius: 10px;
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+      }
+
+      #btnSi {
+        background-color: #ff4da6;
+        color: white;
+        box-shadow: 0 0 15px #ff80c0;
+      }
+
+      #btnSi:hover {
+        background-color: #ff80c0;
+      }
+
+      #btnNo {
+        background-color: #222;
+        color: #fff;
+        box-shadow: 0 0 10px #000;
+      }
+
+      #btnNo:hover {
+        background-color: #444;
+      }
+
+      img {
+        width: 250px;
+        border-radius: 15px;
+        margin-top: 10px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        max-width: 90vw;
+        height: auto;
+      }
+
+      /* MODAL (FONDO) */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        display: none;
+        justify-content: center;   /* 🔹 centra horizontalmente */
+        align-items: center;       /* 🔹 centra verticalmente */
+        z-index: 10;
+        padding: 0;
+        backdrop-filter: blur(6px);
+      }
+
+      /* CUADRO DE LA CARTA */
+      .modal-content {
+        position: relative;
+        background: rgba(255, 255, 255, 0.97);
+        color: #000;
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 380px;
+        text-align: center;
+        border: 4px solid #ff66b2;     /* 💖 marco visible */
+        box-shadow: 0 0 35px #ff99cc;  /* ✨ brillo exterior */
+        animation: fadeIn 0.4s ease, glowBorder 2s infinite ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;       /* 🔹 centra el contenido dentro */
+        align-items: center;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes glowBorder {
+        0% {
+          box-shadow: 0 0 15px #ff66b2;
+        }
+        50% {
+          box-shadow: 0 0 35px #ff99cc;
+        }
+        100% {
+          box-shadow: 0 0 15px #ff66b2;
+        }
+      }
+
+      .close {
+        background: #ff66b2;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-top: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      .close:hover {
+        background: #ff99cc;
+      }
+
+      audio {
+        display: none;
+      }
+
+      /* Ajuste especial para celulares */
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .modal-content {
+          width: 90%;
+          max-width: 340px;
+          padding: 25px;
+        }
+
+        .modal-content img {
+          width: 100px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">💔 Perdóname mi amor 💔</h1>
+    <p id="text">Sé que fallé... pero no quiero perderte 😢</p>
+
+    <div class="btn-container" id="containerBtns">
+      <button id="btnSi">Sí</button>
+      <button id="btnNo">No</button>
+    </div>
+
+    <img
+      id="img"
+      src="https://i.postimg.cc/hv1VRTG1/Imagen-de-Whats-App-2025-10-08-a-las-18-35-16-55713ab0.jpg"
+      alt="triste"
+    />
+
+    <!-- Música triste -->
+    <audio id="music" loop>
+      <source
+        src="https://github.com/codeninja543/codeninja5433/raw/refs/heads/main/Ed%20Maverick%20-%20Fuentes%20De%20Ortiz.mp3"
+        type="audio/mp3"
+      />
+    </audio>
+
+    <!-- Modal de carta -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <h2>💌 Carta para ti...</h2>
+        <p>
+          Mi amor, perdóname… sé que te hice daño y que rompí algo hermoso.  
+          No hay palabras que borren mi error, pero quiero que sepas que  
+          cada día me arrepiento de haberte fallado.  
+          Me duele imaginarte triste por mi culpa.  
+          Si pudiera retroceder el tiempo, nunca te haría llorar.  
+          Solo quiero volver a verte sonreír… te amo de verdad 💔
+        </p>
+        <img
+          src="https://i.postimg.cc/xT9Kyxxr/Imagen-de-Whats-App-2025-10-08-a-las-18-35-17-5d32d419.jpg"
+          alt="corazón roto"
+          width="120"
+        />
+        <button class="close" id="closeModal">Cerrar</button>
+      </div>
+    </div>
+
+    <script>
+      const FRASES = ["Por favor 😭", "No me dejes 💔", "Te lo ruego 😢", "Chii... 😞"];
+      const IMAGENES = [
+        "https://i.postimg.cc/Gp8NL5rv/Imagen-de-Whats-App-2025-10-08-a-las-18-04-07-8bd07ef2.jpg",
+        "https://i.postimg.cc/Gp8NL5rv/Imagen-de-Whats-App-2025-10-08-a-las-18-04-07-8bd07ef2.jpg",
+        "https://i.postimg.cc/4xrP5Nkz/Imagen-de-Whats-App-2025-10-08-a-las-18-04-07-35787c9c.jpg",
+        "https://i.postimg.cc/XNff5Sgc/Imagen-de-Whats-App-2025-10-08-a-las-18-35-16-5ca050bb.jpg",
+      ];
+
+      const title = document.getElementById("title");
+      const img = document.getElementById("img");
+      const btnNo = document.getElementById("btnNo");
+      const btnSi = document.getElementById("btnSi");
+      const modal = document.getElementById("modal");
+      const closeModal = document.getElementById("closeModal");
+      const music = document.getElementById("music");
+
+      let contador = 0;
+
+      btnSi.addEventListener("click", () => {
+        modal.style.display = "flex"; /* muestra la carta centrada */
+      });
+
+      closeModal.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+      btnNo.addEventListener("click", () => {
+        title.textContent = FRASES[contador];
+        img.src = IMAGENES[contador];
+        contador++;
+        if (contador >= FRASES.length) contador = 0;
+
+        music.play().catch(() => {
+          console.log("El navegador bloqueó la reproducción automática.");
+        });
+      });
+    </script>
+  </body>
+</html>
