@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary Sara</title>
+    <!-- Importing a romantic font -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS Styles --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrollbars from hearts */
+            color: #5e2a40;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #d63384;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #4a4a4a;
+        }
+
+        .btn {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Sections Logic */
+        .step {
+            display: none; /* Hidden by default */
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            background-color: #ff4d6d;
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            animation: floatUp linear infinite;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4d6d;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -10px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(45deg) scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(45deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Popup Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(214, 51, 132, 0.5);
+            max-width: 90%;
+            border: 2px solid #ff4d6d;
+        }
+
+        .modal-content h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #d63384;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            p { font-size: 1rem; }
+            .container { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Music -->
+    <!-- Note: Ensure you have a file named 'music.mp3' in the same folder -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Floating Hearts Container -->
+    <div id="hearts-container"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Step 1 -->
+        <div id="step1" class="step active">
+            <h1>Hi Sara 💕</h1>
+            <p>Happy 5th Month Anniversary, my love ❤️</p>
+            <button class="btn" onclick="startExperience()">Start 💖</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" class="step">
+            <p>These 5 months with you have been the happiest moments of my life.<br><br>
+            Thank you for being in my life, Sara.<br>
+            I love you more every single day 💕</p>
+            <button class="btn" onclick="showFinalPopup()">I Love You ❤️</button>
+        </div>
+
+    </div>
+
+    <!-- Final Popup -->
+    <div id="finalModal" class="modal">
+        <div class="modal-content">
+            <h2>Forever with you, mi novia 💖</h2>
+            <br>
+            <p style="margin-bottom: 0;">❤️ ❤️ ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        // --- JavaScript Logic ---
+
+        // 1. Start Experience
+        function startExperience() {
+            // Hide Step 1, Show Step 2
+            document.getElementById('step1').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('step2').classList.add('active');
+            }, 500); // Small delay for smooth transition
+
+            // Play Music
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.5; // Set volume to 50%
+            
+            // Handle browser autoplay policies
+            const playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Auto-play was prevented. User must interact with the DOM first.");
+                });
+            }
+        }
+
+        // 2. Show Final Popup
+        function showFinalPopup() {
+            document.getElementById('finalModal').style.display = 'flex';
+            // Trigger a burst of hearts on click
+            for(let i=0; i<30; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+
+        // 3. Floating Hearts Animation Logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Randomize position and speed
+            const left = Math.random() * 100; // 0% to 100% width
+            const size = Math.random() * 20 + 10; // 10px to 30px
+            const duration = Math.random() * 3 + 4; // 4s to 7s
+            
+            heart.style.left = left + 'vw';
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            heart.style.animationDuration = duration + 's';
+
+            document.getElementById('hearts-container').appendChild(heart);
+
+            // Remove heart after animation to keep DOM clean
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        // Generate hearts continuously
+        setInterval(createHeart, 500);
+
+    </script>
+</body>
+</html>
