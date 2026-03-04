@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hadiah Misterius</title>
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* Prevent text selection on rapid clicks */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            background-image: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        /* --- CANVAS FOR PARTICLES --- */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Let clicks pass through */
+            z-index: 10;
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            position: relative;
+            z-index: 20;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        /* --- THE BUTTON --- */
+        .btn-start {
+            background: transparent;
+            color: #00f2ff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border: 2px solid #00f2ff;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #00f2ff, inset 0 0 15px #00f2ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            animation: pulse-btn 2s infinite;
+        }
+
+        .btn-start:active {
+            transform: scale(0.95);
+            background: #00f2ff;
+            color: #000;
+        }
+
+        @keyframes pulse-btn {
+            0% { box-shadow: 0 0 15px #00f2ff, inset 0 0 15px #00f2ff; }
+            50% { box-shadow: 0 0 30px #00f2ff, inset 0 0 30px #00f2ff; }
+            100% { box-shadow: 0 0 15px #00f2ff, inset 0 0 15px #00f2ff; }
+        }
+
+        /* --- THE REVEAL TEXT (ANJAY) --- */
+        .reveal-text {
+            display: none; /* Hidden initially */
+            font-size: 5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 
+                0 0 10px #ff00de,
+                0 0 20px #ff00de,
+                0 0 40px #ff00de,
+                0 0 80px #ff00de;
+            animation: pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .emoji {
+            display: block;
+            font-size: 3rem;
+            margin-top: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pop-in {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- REPLAY BUTTON --- */
+        .btn-replay {
+            display: none;
+            margin-top: 30px;
+            background: #ff0055;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff0055;
+            transition: transform 0.2s;
+        }
+        .btn-replay:hover { transform: scale(1.05); }
+
+        /* --- SCREEN SHAKE ANIMATION --- */
+        .shake-screen {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-4px, 0, 0); }
+            20%, 80% { transform: translate3d(6px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+            40%, 60% { transform: translate3d(8px, 0, 0); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .reveal-text { font-size: 3.5rem; }
+            .btn-start { font-size: 1.2rem; padding: 15px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container" id="main-container">
+        <button class="btn-start" id="start-btn">Pencet untuk hadiah</button>
+        
+        <div class="reveal-text" id="result-text">
+            ANJAY
+            <span class="emoji">🔥</span>
+        </div>
+
+        <button class="btn-replay" id="replay-btn">Main Lagi</button>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('start-btn');
+        const resultText = document.getElementById('result-text');
+        const replayBtn = document.getElementById('replay-btn');
+        const container = document.getElementById('main-container');
+
+        let particles = [];
+        let animationId;
+        let isExploding = false;
+
+        // Resize canvas to fill screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // --- AUDIO SYSTEM (Web Audio API) ---
+        // Generates a synthesized explosion sound without external files
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playExplosionSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const t = audioCtx.currentTime;
+            
+            // 1. Low frequency rumble
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(100, t);
+            osc.frequency.exponentialRampToValueAtTime(10, t + 0.5);
+            gain.gain.setValueAtTime(0.5, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(t);
+            osc.stop(t + 0.5);
+
+            // 2. White noise burst (crackle)
+            const bufferSize = audioCtx.sampleRate * 0.5; // 0.5 seconds
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.3, t);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+            
+            noise.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+            noise.start(t);
+        }
+
+        // --- PARTICLE SYSTEM ---
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                // Random velocity in all directions
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 10 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                
+                this.life = 1.0; // Opacity/Life
+                this.decay = Math.random() * 0.02 + 0.015;
+                
+                // Fire colors
+                const colors = ['#ff0000', '#ff7f00', '#ffff00', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.size = Math.random() * 5 + 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.2; // Gravity
+                this.life -= this.decay;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        function createExplosion(x, y) {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+
+            if (particles.length > 0) {
+                animationId = requestAnimationFrame(animateParticles);
+            }
+        }
+
+        // --- MAIN LOGIC ---
+        function triggerEvent() {
+            if (isExploding) return;
+            isExploding = true;
+
+            // 1. Get button position for explosion center
+            const rect = startBtn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // 2. Play Sound
+            playExplosionSound();
+
+            // 3. Create Particles
+            createExplosion(centerX, centerY);
+            animateParticles();
+
+            // 4. Screen Shake
+            container.classList.add('shake-screen');
+
+            // 5. Hide Button & Show Text after delay
+            setTimeout(() => {
+                startBtn.style.display = 'none';
+                resultText.style.display = 'block';
+                replayBtn.style.display = 'inline-block';
+                container.classList.remove('shake-screen');
+            }, 500); // 500ms matches the shake duration
+        }
+
+        function resetGame() {
+            isExploding = false;
+            particles = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            resultText.style.display = 'none';
+            replayBtn.style.display = 'none';
+            startBtn.style.display = 'inline-block';
+            
+            // Reset animation classes
+            startBtn.style.animation = 'pulse-btn 2s infinite';
+        }
+
+        // --- EVENT LISTENERS ---
+        startBtn.addEventListener('click', triggerEvent);
+        replayBtn.addEventListener('click', resetGame);
+
+    </script>
+</body>
+</html>
