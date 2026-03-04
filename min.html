@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Dila!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Reset & Aesthetics --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #555;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Main Card Container --- */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            z-index: 10;
+            transition: all 0.5s ease;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #d63384;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 154, 158, 0.6);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- Sections Visibility --- */
+        .hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Special Effects --- */
+        .glow-text {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #ff9a9e; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff69b4; }
+        }
+
+        /* Floating Hearts Background */
+        .heart {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.6);
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Typing Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Step 1: Welcome Screen -->
+    <div class="card" id="step1">
+        <h1>Hai Dila 🎉</h1>
+        <p>Ada sesuatu yang spesial untukmu...</p>
+        <button class="btn" onclick="startSurprise()">Klik untuk kejutan</button>
+    </div>
+
+    <!-- Step 2: Birthday Surprise -->
+    <div class="card hidden" id="step2">
+        <h1 class="glow-text">Selamat Ulang Tahun Dila 🎂✨</h1>
+        <p id="typing-message" class="typing-cursor"></p>
+    </div>
+
+    <!-- Step 3: Final Screen -->
+    <div class="card hidden" id="step3">
+        <h1>Hari ini hari spesialmu 🎈</h1>
+        <p>Semoga harimu seindah senyumanmu.</p>
+        <button class="btn" onclick="resetSurprise()">Ulangi lagi</button>
+    </div>
+
+    <!-- Audio (Optional - Hidden) -->
+    <!-- You can add a real mp3 source here -->
+    <audio id="bg-music" loop>
+        <source src="" type="audio/mp3">
+    </audio>
+
+    <script>
+        // --- Configuration ---
+        const messageText = "Semoga panjang umur, sehat selalu, dan semua impianmu tercapai 💖";
+        
+        // --- DOM Elements ---
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const typingElement = document.getElementById('typing-message');
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // --- Resize Canvas ---
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // --- Step 1 to Step 2 Transition ---
+        function startSurprise() {
+            // Hide Step 1
+            step1.classList.add('hidden');
+            
+            // Show Step 2 with animation
+            step2.classList.remove('hidden');
+            step2.classList.add('fade-in');
+
+            // Start Confetti
+            startConfetti();
+
+            // Start Typing Effect
+            typeWriter(messageText, 0);
+
+            // Start Floating Hearts
+            createFloatingHearts();
+        }
+
+        // --- Typing Effect Logic ---
+        function typeWriter(text, i) {
+            if (i < text.length) {
+                typingElement.innerHTML += text.charAt(i);
+                setTimeout(() => typeWriter(text, i + 1), 50); // Speed of typing
+            } else {
+                // After typing finishes, wait a bit then go to final screen
+                setTimeout(() => {
+                    showFinalScreen();
+                }, 2000);
+            }
+        }
+
+        // --- Step 2 to Step 3 Transition ---
+        function showFinalScreen() {
+            step2.classList.add('hidden');
+            step3.classList.remove('hidden');
+            step3.classList.add('fade-in');
+        }
+
+        // --- Reset Logic ---
+        function resetSurprise() {
+            stopConfetti();
+            step3.classList.add('hidden');
+            step1.classList.remove('hidden');
+            step1.classList.add('fade-in');
+            
+            // Clear typing
+            typingElement.innerHTML = "";
+        }
+
+        // --- Confetti Logic (Vanilla JS) ---
+        let confettiParticles = [];
+        let animationId;
+
+        function startConfetti() {
+            const colors = ['#ff9a9e', '#fad0c4', '#a18cd1', '#fbc2eb', '#8fd3f4'];
+            
+            for (let i = 0; i < 100; i++) {
+                confettiParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 2,
+                    d: Math.random() * 10 + 10, // density
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.floor(Math.random() * 10) - 10,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+                    tiltAngle: 0
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            confettiParticles.forEach((p, index) => {
+                p.tiltAngle += p.tiltAngleIncremental;
+                p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                p.tilt = Math.sin(p.tiltAngle - index / 3) * 15;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                ctx.stroke();
+
+                // Reset particle if it goes off screen
+                if (p.y > canvas.height) {
+                    p.x = Math.random() * canvas.width;
+                    p.y = -10;
+                }
+            });
+
+            animationId = requestAnimationFrame(animateConfetti);
+        }
+
+        function stopConfetti() {
+            cancelAnimationFrame(animationId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiParticles = [];
+        }
+
+        // --- Floating Hearts Logic ---
+        function createFloatingHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+                heart.style.fontSize = Math.random() * 20 + 10 + "px";
+                
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
