@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Lyric Video</title>
+    
+    <!-- Importing an elegant cinematic serif font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --transition-speed: 2.5s; /* Speed of the fade/scroll effect */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Cormorant Garamond', serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Prevents scrollbars */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* The container for the lyrics stack */
+        #lyric-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lyric-line {
+            position: absolute;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Subtle glow */
+            max-width: 80%;
+        }
+
+        /* 
+           STATE: ACTIVE (The current line being sung)
+           Centered, fully visible, sharp.
+        */
+        .lyric-line.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            z-index: 10;
+        }
+
+        /* 
+           STATE: PAST (The line that just finished)
+           Moves up, fades out, slightly blurry.
+        */
+        .lyric-line.past {
+            opacity: 0;
+            transform: translateY(-150px) scale(0.9);
+            filter: blur(2px);
+            z-index: 5;
+        }
+
+        /* 
+           STATE: FUTURE (The line waiting to appear)
+           Sits slightly below, invisible.
+        */
+        .lyric-line.future {
+            opacity: 0;
+            transform: translateY(150px) scale(0.9);
+            z-index: 1;
+        }
+
+        /* Start Overlay */
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
+
+        #start-btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid white;
+            padding: 15px 40px;
+            background: transparent;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .lyric-line {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div id="start-overlay">
+        <button id="start-btn">Enter Experience</button>
+    </div>
+
+    <!-- Lyrics Container -->
+    <div id="lyric-stage">
+        <!-- Lyrics will be injected here by JS -->
+    </div>
+
+    <script>
+        // The Lyrics Data
+        const lyrics = [
+            "dear lord, when I get to heaven",
+            "please, let me bring my girl",
+            "when she comes, tell me that you'll let her in",
+            "Allah, tell me if you can",
+            "all the grace, all that body",
+            "all that face makes me wanna party",
+            "she's my sun, she makes me shine like diamonds"
+        ];
+
+        const stage = document.getElementById('lyric-stage');
+        const overlay = document.getElementById('start-overlay');
+        const startBtn = document.getElementById('start-btn');
+
+        let currentIndex = 0;
+        let animationInterval;
+
+        // Initialize the DOM with all lyrics
+        function initLyrics() {
+            lyrics.forEach((text, index) => {
+                const div = document.createElement('div');
+                div.classList.add('lyric-line');
+                div.classList.add('future'); // Start as future
+                div.innerText = text;
+                div.id = `line-${index}`;
+                stage.appendChild(div);
+            });
+        }
+
+        // The logic to switch lines
+        function updateLyrics() {
+            // 1. Handle the current line (becomes active)
+            const currentLine = document.getElementById(`line-${currentIndex}`);
+            currentLine.classList.remove('future');
+            currentLine.classList.add('active');
+
+            // 2. Handle the previous line (becomes past)
+            if (currentIndex > 0) {
+                const prevLine = document.getElementById(`line-${currentIndex - 1}`);
+                prevLine.classList.remove('active');
+                prevLine.classList.add('past');
+            }
+
+            // 3. Handle the next line (becomes future)
+            if (currentIndex < lyrics.length - 1) {
+                const nextLine = document.getElementById(`line-${currentIndex + 1}`);
+                nextLine.classList.remove('past'); // Reset if it was past
+                nextLine.classList.add('future');
+            }
+
+            // 4. Increment index
+            currentIndex++;
+
+            // 5. Loop or Stop
+            if (currentIndex >= lyrics.length) {
+                // Optional: Loop the video
+                currentIndex = 0;
+                // Reset classes for loop
+                document.getElementById('line-0').classList.remove('past');
+                document.getElementById('line-0').classList.add('active');
+                document.getElementById('line-6').classList.remove('active');
+                document.getElementById('line-6').classList.add('past');
+            }
+        }
+
+        // Start the sequence
+        function startSequence() {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1000);
+
+            // Initial render
+            updateLyrics();
+
+            // Set interval (simulating music timing)
+            // Adjust 3000 to change speed of lyrics
+            animationInterval = setInterval(updateLyrics, 3000); 
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startSequence);
+        
+        // Initialize DOM on load
+        initLyrics();
+
+    </script>
+</body>
+</html>
