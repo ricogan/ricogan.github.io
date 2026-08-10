@@ -598,6 +598,10 @@ display:none;
 }
 
 }
+/*==========================
+BIRTHDAYcss
+==========================*/
+
 .birthday-calendar{
 
     display:none;
@@ -633,7 +637,9 @@ display:none;
 }
 
 }
-/* ===== Games Card ===== */
+/*==========================
+GAMEcss
+==========================*/
 
 #gameContent{
     animation:fade .4s;
@@ -702,6 +708,7 @@ display:none;
         transform:translateY(0);
     }
 }
+
 #gameContent{
     display:flex;
     flex-direction:column;
@@ -721,172 +728,638 @@ display:none;
     text-align:left;
 }
 /*==========================
-THEME
+THEME CSS
 ==========================*/
 
-#bgVideo{
+/* ==========================
+   BACKGROUND VIDEOS
+========================== */
 
-position:fixed;
+#bgVideo,
+#dayVideo,
+#sakuraVideo {
 
-top:0;
-left:0;
+    position: fixed;
 
-width:100%;
-height:100%;
+    top: 0;
+    left: 0;
 
-object-fit:cover;
+    width: 100%;
+    height: 100%;
 
-opacity:0;
+    object-fit: cover;
 
-transition:.8s;
+    pointer-events: none;
 
-z-index:-10;
+    z-index: -10;
 
-pointer-events:none;
+    opacity: 0;
+    visibility: hidden;
 
+    transition: opacity .8s ease;
 }
 
-#sakura{
 
-position:fixed;
+/* ==========================
+   BLACK THEME
+========================== */
 
-inset:0;
+.theme-black {
 
-pointer-events:none;
+    background: #000;
 
-z-index:-9;
-
-overflow:hidden;
-
+    color: white;
 }
 
-.theme-black{
+.theme-black #bgVideo {
 
-background:#000;
-
-color:white;
-
+    opacity: 1;
+    visibility: visible;
 }
 
-.theme-black #bgVideo{
 
-opacity:1;
+/* ==========================
+   WHITE THEME
+========================== */
 
+.theme-white {
+
+    background: #fafafa;
+
+    color: #222;
 }
 
-.theme-black .card{
+.theme-white #dayVideo {
 
-background:#1e1e1e;
-
-color:white;
-
+    opacity: 1;
+    visibility: visible;
 }
 
-.theme-white{
 
-background:#fafafa;
+/* ==========================
+   PINK THEME
+========================== */
 
-color:#222;
+.theme-pink {
 
+    background: #f8dce5;
+
+    color: #222;
 }
 
-.theme-white .card{
+.theme-pink #sakuraVideo {
 
-background:white;
-
-color:#222;
-
+    opacity: 1;
+    visibility: visible;
 }
 
-.theme-pink{
 
-background:url("sakura.jpg");
+/* ==========================
+   GLASS CARD
+========================== */
 
-background-size:cover;
+.card {
 
-background-position:center;
+    background: rgba(255, 255, 255, 0.28);
 
-background-attachment:fixed;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 
+    border: 1px solid rgba(255, 255, 255, 0.30);
+
+    color: #222;
 }
 
-.theme-pink .card{
 
-background:rgba(255,255,255,.9);
+/* ==========================
+   BLACK CARD
+========================== */
 
-backdrop-filter:blur(8px);
+body.theme-black .card {
 
+    background: rgba(0, 0, 0, 0.38);
+
+    color: white;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
 }
 
-#themeCard{
 
-text-align:center;
+/* ==========================
+   WHITE CARD
+========================== */
 
-cursor:pointer;
+body.theme-white .card {
 
-transition:.3s;
+    background: rgba(255, 255, 255, 0.38);
 
+    color: #222;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.40);
 }
 
-#themeCard:hover{
 
-transform:scale(1.05);
+/* ==========================
+   PINK CARD
+========================== */
 
+body.theme-pink .card {
+
+    background: rgba(255, 192, 210, 0.45);
+
+    color: #222;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-#themeIcon{
 
-font-size:55px;
+/* ==========================
+   SAKURA EFFECT
+========================== */
 
-display:block;
+#sakura {
 
-margin-bottom:15px;
+    position: fixed;
 
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: -9;
+
+    overflow: hidden;
 }
 
-.petal{
 
-position:absolute;
+/* ==========================
+   THEME CARD
+========================== */
 
-width:25px;
+#themeCard {
 
-animation:fall linear forwards;
+    text-align: center;
 
+    cursor: pointer;
+
+    transition: .3s;
 }
 
-@keyframes fall{
+#themeCard:hover {
 
-0%{
-
-transform:translateY(-100px) rotate(0deg);
-
-opacity:1;
-
+    transform: scale(1.05);
 }
 
-100%{
+#themeIcon {
 
-transform:translateY(110vh) rotate(720deg);
+    font-size: 55px;
 
-opacity:0;
+    display: block;
 
+    margin-bottom: 15px;
+}
+/* ==========================
+   FRIEND MODAL
+========================== */
+
+.friend-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 9999;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
+
+/* MODAL AKTIF */
+
+.friend-modal.active {
+
+    display: flex;
 }
+
+
+/* ==========================
+   MODAL BOX
+========================== */
+
+.friend-modal-box {
+
+    position: relative;
+
+    width: min(85%, 420px);
+
+    padding: 30px;
+
+    border-radius: 25px;
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+
+    animation: friendModalIn .25s ease;
+}
+
+
+/* ==========================
+   BLACK THEME MODAL
+========================== */
+
+body.theme-black .friend-modal-box {
+
+    background: rgba(0, 0, 0, 0.55);
+
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+
+/* ==========================
+   WHITE THEME MODAL
+========================== */
+
+body.theme-white .friend-modal-box {
+
+    background: rgba(255, 255, 255, 0.55);
+
+    color: #222;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+
+/* ==========================
+   PINK THEME MODAL
+========================== */
+
+body.theme-pink .friend-modal-box {
+
+    background: rgba(255, 192, 210, 0.55);
+
+    color: #222;
+
+    border: 1px solid rgba(255, 255, 255, 0.40);
+}
+
+
+/* ==========================
+   CLOSE BUTTON
+========================== */
+
+.friend-close {
+
+    position: absolute;
+
+    top: 10px;
+    right: 12px;
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    font-size: 30px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    opacity: .65;
+
+    transition: .2s;
+}
+
+
+.friend-close:hover {
+
+    opacity: 1;
+
+    transform: rotate(90deg);
+}
+
+
+/* ==========================
+   MODAL TITLE
+========================== */
+
+.friend-modal-title {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+
+.friend-modal-title span {
+
+    display: block;
+
+    font-size: 28px;
+
+    margin-bottom: 8px;
+}
+
+
+.friend-modal-title h2 {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 600;
+}
+
+
+/* ==========================
+   OPTIONS
+========================== */
+
+.friend-options {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.friend-option {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 16px 18px;
+
+    border-radius: 16px;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    transition: .25s ease;
+}
+
+
+.friend-option:hover {
+
+    transform: translateY(-2px);
+
+    background: rgba(255, 255, 255, 0.18);
+}
+
+
+.option-icon {
+
+    font-size: 22px;
+}
+
+
+.friend-option span:nth-child(2) {
+
+    flex: 1;
+
+    font-size: 15px;
+}
+
+
+.friend-option b {
+
+    font-size: 25px;
+
+    font-weight: normal;
+
+    opacity: .6;
+}
+
+
+/* ==========================
+   ANIMATION
+========================== */
+
+@keyframes friendModalIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: scale(.90);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: scale(1);
+    }
+}
+
+/*==========================
+I LOVE CSS
+==========================*/
+
+.love-card{
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    padding:30px;
+
+    font-size:18px;
+    font-weight:600;
+
+    text-align:center;
+
+    position:relative;
+    overflow:hidden;
+}
+
+
+/*==========================
+I LOVE ICON
+==========================*/
+
+.love-card > span{
+    display:block;
+
+    font-size:55px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+}
+
+
+/*==========================
+I LOVE TITLE
+==========================*/
+
+.love-card h3{
+    font-size:22px;
+    font-weight:600;
+
+    text-align:center;
+
+    margin:0 0 15px 0;
+}
+
+
+/*==========================
+I LOVE LIST
+==========================*/
+
+.love-card p{
+    width:fit-content;
+
+    margin:0 auto;
+
+    text-align:left;
+
+    font-size:18px;
+    font-weight:600;
+
+    line-height:1.8;
+}
+
+
+/*==========================
+LOVE HEART ANIMATION
+==========================*/
+
+.love-heart{
+    position:fixed;
+    pointer-events:none;
+    z-index:9999;
+
+    animation:loveFloat 2s ease-out forwards;
+}
+
+@keyframes loveFloat{
+
+    0%{
+        transform:translateY(0) scale(.5);
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        transform:translateY(-300px) scale(1.3);
+        opacity:0;
+    }
+}
+/*==========================
+CSS INFO
+==========================*/
+#info-message {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: infoPopup 5s ease forwards;
+}
+
+@keyframes infoPopup {
+    0% {
+        bottom: -100px;
+        opacity: 0;
+    }
+
+    15% {
+        bottom: 25px;
+        opacity: 1;
+    }
+
+    75% {
+        bottom: 25px;
+        opacity: 1;
+    }
+
+    100% {
+        bottom: -100px;
+        opacity: 0;
+    }
+}
+
 </style>
 
 </head>
 
 <body>
+  <!--==========================
+THEME VIDEO
+==========================-->
+
 <video id="bgVideo" autoplay muted loop playsinline>
+    <source src="night.mp4" type="video/mp4">
+</video>
 
-<source src="night.mp4" type="video/mp4">
+<video id="dayVideo" muted loop playsinline>
+    <source src="day.mp4" type="video/mp4">
+</video>
 
+<video id="sakuraVideo" muted loop playsinline>
+    <source src="sakura.mp4" type="video/mp4">
 </video>
 
 <div id="sakura"></div>
 
 <div id="progress"></div>
+
+<!--==========================
+HTML INFO
+==========================-->
+
+<div id="info-message">
+    💡 Untuk informasi lebih lengkap, klik setiap kotak.
+</div>
 
 <div class="menu">
 
@@ -942,21 +1415,15 @@ About Me
 
 <div class="about">
 
-<div>
-
-<img src="profile.jpg">
-
-</div>
-
 <div class="about-text">
 
-Hi para anjir! My name is Rico yall can me mine
+Hi para anjir! My name is Rico yall can call me mine
 
-I am an Electrical Engineering student from Indonesia.
+I am a kind boy from Indonesia.
 
 I love try snth new, technology, traveling, learning new languages, and sleeping at all.
 
-My dream being rich(like my name) w/o work, continue learning
+My dream being rich(like my name) w/o work, continue dreaming
 
 </div>
 
@@ -1115,19 +1582,28 @@ Rabbit Invasion
 </p>
 </div>
 
-<div class="card favorite">
-<span>🤍</span>
-I Love
-<p>
-I Love My Mom<br>
-I Love My Cat<br>
-I Love My Gf<br>
-I Love My Bed<br>
-I Love Peace<br>
-I Love Lana Del Rey<br>
-I Love Music<br>
-I Love Games
-</p>
+
+<!--==========================
+ILovehtml
+==========================-->
+
+<div class="card love-card" onclick="loveHearts(event)">
+
+    <span>❤️</span>
+
+    <h3>I Love</h3>
+
+    <p>
+        I Love My Mom<br>
+        I Love My Cat<br>
+        I Love My Gf<br>
+        I Love My Bed<br>
+        I Love Peace<br>
+        I Love Lana Del Rey<br>
+        I Love Music<br>
+        I Love Games
+    </p>
+
 </div>
 
 <div class="card favorite" onclick="changeTheme()">
@@ -1184,8 +1660,55 @@ Fav Quotes
 
 <div class="card favorite">
 <span>💬</span>
-Ma quote
+Ma Quote
 <p>Be ambitious, just don't be ambitious and lazy like me.</p>
+
+</div>
+<div class="card favorite" onclick="openFriendModal()">
+    <span>💬</span>
+    Friend Quote
+    <p><b class="highlight">ga pelit ga pamerrr unairrr</b></p>
+</div>
+
+<!-- FRIEND MODAL -->
+<div id="friendModal" class="friend-modal">
+
+    <div class="friend-modal-box">
+
+        <button class="friend-close" onclick="closeFriendModal()">×</button>
+
+        <div class="friend-modal-title">
+            <span>💬</span>
+            <h2>What are you looking for?</h2>
+        </div>
+
+        <div class="friend-options">
+
+            <!-- UNAIR -->
+            <a href="https://www.google.com/maps/search/?api=1&query=Universitas+Airlangga"
+               target="_blank"
+               class="friend-option">
+
+                <span class="option-icon">📍</span>
+                <span>UNAIR</span>
+                <b>›</b>
+
+            </a>
+
+            <!-- DHILA -->
+            <a href="whatsapp://send?phone=62831001079710&text=GOOOOOKIIIILLLLLL%20ANJIIIR"
+               target="_blank"
+               class="friend-option">
+
+                <span class="option-icon">💬</span>
+                <span>Say Gokil</span>
+                <b>›</b>
+
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -1326,7 +1849,7 @@ Su Mo Tu We Th Fr Sa
 🎮 Discord
 </a>
 
-<a href="whatsapp://send?phone=6285748962940&text=Hello%20handsome,%20nonchalant,%20cool%20boy😎">
+<a href="whatsapp://send?phone=6285748962940&text=Hello%20handsome,%20nonchalant,%20cool,%20chill,%20gemez,%20calm,%20nonstop%20aura,">
     💬 WhatsApp
 </a>
 
@@ -1356,6 +1879,9 @@ Thanks for visiting my personal website.
   const music=document.getElementById("music");
 const songCard=document.querySelector(".favorite");
 
+/*==========================
+MUSICjs
+==========================*/
 function toggleMusic(){
 
 if(music.paused){
@@ -1373,18 +1899,27 @@ songCard.style.background="";
 }
 
 }
+/*==========================
+ARTISTjs
+==========================*/
 function openArtist() {
     window.open(
         "https://www.google.com/search?q=Lana+Del+Rey",
         "_blank"
     );
 }
+/*==========================
+SCHOOLjs
+==========================*/
 function openSchool() {
     window.open(
         "https://www.google.com/search?q=SMK+Raden+Paku+Wringinanom",
         "_blank"
     );
 }
+/*==========================
+BIRTHDAYjs
+==========================*/
 function toggleBirthday(){
 
     const calendar=document.getElementById("birthdayCalendar");
@@ -1400,6 +1935,9 @@ function toggleBirthday(){
     }
 
 }
+/*==========================
+GAMEjs
+==========================*/
 let gamePage = 0;
 
 function flipGame(){
@@ -1507,117 +2045,188 @@ game.innerHTML=`
 }
 
 }
-let currentTheme=0;
+/*==========================
+THEME JS
+==========================*/
 
-const icons=[
-"🖤",
-"🤍",
-"🩷"
+let currentTheme = 0;
+
+const icons = [
+    "🖤",
+    "🤍",
+    "🩷"
 ];
 
-const titles=[
-"Black Theme",
-"White Theme",
-"Pink Theme"
+const titles = [
+    "Black Theme",
+    "White Theme",
+    "Pink Theme"
 ];
 
-const classes=[
-"theme-black",
-"theme-white",
-"theme-pink"
+const classes = [
+    "theme-black",
+    "theme-white",
+    "theme-pink"
 ];
 
-function changeTheme(){
+function changeTheme() {
 
-currentTheme++;
+    currentTheme++;
 
-if(currentTheme>2){
+    if (currentTheme > 2) {
+        currentTheme = 0;
+    }
 
-currentTheme=0;
+    document.body.classList.remove(
+        "theme-black",
+        "theme-white",
+        "theme-pink"
+    );
 
+    document.body.classList.add(classes[currentTheme]);
+
+    document.getElementById("themeIcon").textContent =
+        icons[currentTheme];
+
+    document.getElementById("themeTitle").textContent =
+        titles[currentTheme];
+
+
+    /* ==========================
+       GET VIDEOS
+    ========================== */
+
+    const nightVideo = document.getElementById("bgVideo");
+    const dayVideo = document.getElementById("dayVideo");
+    const sakuraVideo = document.getElementById("sakuraVideo");
+
+
+    /* ==========================
+       STOP SEMUA VIDEO
+    ========================== */
+
+    nightVideo.pause();
+    dayVideo.pause();
+    sakuraVideo.pause();
+
+
+    /* ==========================
+       BLACK / NIGHT
+    ========================== */
+
+    if (currentTheme === 0) {
+
+        nightVideo.currentTime = 0;
+        nightVideo.play();
+
+    }
+
+
+    /* ==========================
+       WHITE / DAY
+    ========================== */
+
+    else if (currentTheme === 1) {
+
+        dayVideo.currentTime = 0;
+        dayVideo.play();
+
+    }
+
+
+    /* ==========================
+       PINK / SAKURA
+    ========================== */
+
+    else if (currentTheme === 2) {
+
+        sakuraVideo.currentTime = 0;
+        sakuraVideo.play();
+
+    }
 }
 
-document.body.classList.remove(
-"theme-black",
-"theme-white",
-"theme-pink"
-);
 
-document.body.classList.add(classes[currentTheme]);
-
-document.getElementById("themeIcon").textContent=icons[currentTheme];
-
-document.getElementById("themeTitle").textContent=titles[currentTheme];
-
-const video=document.getElementById("bgVideo");
-
-if(currentTheme==0){
-
-video.play();
-
-}else{
-
-video.pause();
-
-}
-
-if(currentTheme==2){
-
-startPetals();
-
-}else{
-
-stopPetals();
-
-}
-
-}
+/* ==========================
+   DEFAULT THEME
+========================== */
 
 document.body.classList.add("theme-black");
 
-function createPetal(){
+const nightVideo = document.getElementById("bgVideo");
 
-const sakura=document.getElementById("sakura");
+nightVideo.play();
 
-const petal=document.createElement("img");
+/* ==========================
+   FRIEND MODAL
+========================== */
 
-petal.src="petals.png";
-
-petal.className="petal";
-
-petal.style.left=Math.random()*100+"vw";
-
-petal.style.animationDuration=(5+Math.random()*5)+"s";
-
-petal.style.width=(15+Math.random()*20)+"px";
-
-sakura.appendChild(petal);
-
-setTimeout(()=>{
-
-petal.remove();
-
-},10000);
-
+function openFriendModal() {
+    document.getElementById("friendModal").classList.add("active");
 }
 
-let sakuraInterval;
-
-function startPetals(){
-
-sakuraInterval=setInterval(createPetal,250);
-
+function closeFriendModal() {
+    document.getElementById("friendModal").classList.remove("active");
 }
 
-function stopPetals(){
 
-clearInterval(sakuraInterval);
+/*==========================
+ILovejs
+==========================*/
 
-document.getElementById("sakura").innerHTML="";
+function loveHearts(event){
 
+    const rows = [
+        6,   // tingkat 1
+        9,   // tingkat 2
+        12,  // tingkat 3
+        9,   // tingkat 4
+        6    // tingkat 5
+    ];
+
+    const spacing = 25;
+
+    rows.forEach((count, row) => {
+
+        for(let i = 0; i < count; i++){
+
+            const heart = document.createElement("div");
+
+            heart.className = "love-heart";
+            heart.innerHTML = "❤️";
+
+            // posisi tengah tiap tingkat
+            const totalWidth = (count - 1) * spacing;
+            const x = (i * spacing) - totalWidth / 2;
+
+            // posisi bertingkat
+            const y = (row - 2) * 35;
+
+            heart.style.left =
+                (event.clientX + x - 10) + "px";
+
+            heart.style.top =
+                (event.clientY + y - 10) + "px";
+
+            // ukuran sedikit acak
+            const size = 18 + Math.random() * 12;
+            heart.style.fontSize = size + "px";
+
+            // muncul sedikit bergantian
+            heart.style.animationDelay =
+                (Math.random() * 0.5) + "s";
+
+            document.body.appendChild(heart);
+
+            // hapus setelah animasi selesai
+            setTimeout(() => {
+                heart.remove();
+            }, 2500);
+        }
+    });
 }
 
-const text="Electrical Engineering Student • Dreamer • Future Engineer";
+const text="Nonchalant • Mysterious • Absolute Aura";
 
 let i=0;
 
@@ -1636,23 +2245,6 @@ setTimeout(typing,70);
 }
 
 typing();
-function toggleMode(){
-
-document.body.classList.toggle("dark");
-
-const btn=document.querySelector(".toggle");
-
-if(document.body.classList.contains("dark")){
-
-btn.innerHTML="☀️";
-
-}else{
-
-btn.innerHTML="🌙";
-
-}
-
-}
 
 function updateClock(){
 
