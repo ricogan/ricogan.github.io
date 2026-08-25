@@ -1,0 +1,1111 @@
+<!-- PART 1 -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>XII TITL 2 | Class Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================= RESET ================= */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:#000;color:#fff;overflow-x:hidden;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+button{font-family:inherit;border:none;cursor:pointer;}
+
+/* ================= VARIABLES ================= */
+:root{
+  --bg:#000000;
+  --bg-dark:#0a0a0a;
+  --bg-soft:#151515;
+  --yellow:#FFD400;
+  --yellow-dim:rgba(255,212,0,0.15);
+  --white:#FFFFFF;
+  --gray:#a0a0a0;
+  --radius:10px;
+  --radius-lg:16px;
+  --nav-h:64px;
+  --trans:0.25s ease;
+  --trans-mid:0.4s cubic-bezier(.4,0,.2,1);
+}
+
+::-webkit-scrollbar{height:8px;width:8px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--yellow);outline-offset:2px;}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+  position:fixed;top:0;left:0;width:100%;height:var(--nav-h);
+  z-index:1000;
+  background:linear-gradient(to bottom, rgba(0,0,0,.95), transparent);
+  transition:background var(--trans), height var(--trans), box-shadow var(--trans);
+}
+.navbar.scrolled{
+  background:var(--bg);
+  height:56px;
+  box-shadow:0 4px 16px rgba(0,0,0,.5);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.nav-inner{
+  height:100%;max-width:1440px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;letter-spacing:1px;color:var(--white);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.nav-logo .dot{color:var(--yellow);}
+.nav-menu{display:none;gap:22px;}
+.nav-menu a{font-size:.85rem;font-weight:500;color:var(--gray);white-space:nowrap;transition:color var(--trans);}
+.nav-menu a:hover{color:var(--yellow);}
+.nav-actions{display:flex;align-items:center;gap:14px;}
+.nav-icon-btn{background:none;color:var(--white);font-size:1.05rem;padding:4px;}
+.nav-hamburger{display:flex;flex-direction:column;gap:5px;padding:4px;background:none;}
+.nav-hamburger span{width:22px;height:2px;background:var(--white);display:block;transition:transform var(--trans),opacity var(--trans);}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+@media (max-width:899px){
+  .nav-menu{
+    position:fixed;top:var(--nav-h);left:0;width:100%;
+    background:var(--bg-dark);border-bottom:1px solid rgba(255,255,255,.08);
+    flex-direction:column;padding:10px 20px 18px;gap:2px;
+    transform:translateY(-12px);opacity:0;pointer-events:none;
+    transition:transform var(--trans),opacity var(--trans);
+  }
+  .nav-menu.open{display:flex;transform:translateY(0);opacity:1;pointer-events:auto;}
+  .nav-menu a{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+}
+@media (min-width:900px){
+  .nav-menu{display:flex;}
+  .nav-hamburger{display:none;}
+}
+
+.search-bar{
+  position:fixed;top:var(--nav-h);left:0;width:100%;
+  background:var(--bg-dark);border-bottom:1px solid rgba(255,255,255,.08);
+  padding:14px 20px;transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform var(--trans),opacity var(--trans);z-index:999;
+}
+.search-bar.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+.search-bar input{
+  width:100%;max-width:600px;margin:0 auto;display:block;
+  background:var(--bg-soft);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);padding:12px 16px;color:var(--white);font-size:.95rem;
+}
+.search-bar input:focus-visible{outline:2px solid var(--yellow);}
+
+/* ================= HERO ================= */
+.hero{
+  position:relative;min-height:100svh;
+  display:flex;align-items:flex-end;padding:24px 24px 90px;
+}
+.hero-bg{position:absolute;inset:0;z-index:-1;background:var(--bg-soft);}
+.hero-bg.placeholder{
+  background:radial-gradient(circle at 25% 20%, rgba(255,212,0,.12), transparent 42%),
+             linear-gradient(135deg,#151515,#000 70%);
+}
+.hero-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, var(--bg) 8%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.65) 100%);
+}
+.hero-content{position:relative;max-width:720px;animation:fadeUp .8s ease both;}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,11vw,5.5rem);line-height:.95;letter-spacing:1px;
+}
+.hero-title .accent{color:var(--yellow);}
+.hero-desc{margin-top:10px;font-size:1rem;color:var(--gray);max-width:520px;}
+.hero-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:.82rem;color:var(--gray);}
+.hero-meta strong{color:var(--yellow);font-weight:700;}
+.hero-actions{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px;}
+.btn{
+  padding:13px 26px;border-radius:6px;font-weight:700;font-size:.9rem;
+  transition:transform var(--trans),background var(--trans);
+}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:var(--yellow);color:#000;}
+.btn-primary:hover{background:#e6bf00;}
+.btn-secondary{background:rgba(255,255,255,.12);color:var(--white);backdrop-filter:blur(6px);}
+.btn-secondary:hover{background:rgba(255,255,255,.2);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ================= PART 3 ================= */
+
+/* ---------- SECTION UMUM ---------- */
+.section{padding:56px 24px;max-width:1440px;margin:0 auto;}
+.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;gap:12px;}
+.section-title{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:800;letter-spacing:.2px;}
+.section-title .accent{color:var(--yellow);}
+.section-sub{font-size:.85rem;color:var(--gray);margin-top:2px;}
+
+/* Reveal animation saat section muncul */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.in-view{opacity:1;transform:translateY(0);}
+
+/* ---------- SLIDER / CAROUSEL HORIZONTAL ---------- */
+.carousel-wrap{position:relative;}
+.slider{
+  display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;
+  padding-bottom:8px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;
+}
+.slider-item{flex:0 0 auto;scroll-snap-align:start;}
+.carousel-btn{
+  position:absolute;top:40%;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);
+  color:#fff;font-size:1rem;display:none;align-items:center;justify-content:center;
+  z-index:5;transition:background var(--trans);
+}
+.carousel-btn:hover{background:var(--yellow);color:#000;}
+.carousel-btn.prev{left:-6px;}
+.carousel-btn.next{right:-6px;}
+@media (min-width:900px){.carousel-btn{display:flex;}}
+
+/* ---------- POSTER CARD (dasar, dipakai di gallery/moments) ---------- */
+.poster-card{
+  position:relative;width:180px;border-radius:var(--radius);overflow:hidden;
+  background:var(--bg-soft);cursor:pointer;
+  transition:transform var(--trans-mid),box-shadow var(--trans-mid);
+}
+.poster-card:hover,.poster-card:focus-visible{
+  transform:translateY(-6px) scale(1.03);
+  box-shadow:0 0 0 2px var(--yellow),0 16px 32px rgba(0,0,0,.6);
+  z-index:2;
+}
+.poster-img-wrap{aspect-ratio:2/3;background:linear-gradient(135deg,#1b1b1b,#0a0a0a);position:relative;overflow:hidden;}
+.poster-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform var(--trans-mid);}
+.poster-card:hover .poster-img-wrap img{transform:scale(1.07);}
+.poster-img-wrap.placeholder::after{
+  content:'📷';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;opacity:.35;
+}
+.poster-caption{padding:8px 10px;}
+.poster-title{font-size:.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.poster-sub{font-size:.7rem;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.poster-card--wide{width:240px;}
+.poster-card--wide .poster-img-wrap{aspect-ratio:16/9;}
+
+/* ---------- STRUCTURE (lebih spesial dari Members) ---------- */
+.structure-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:18px;
+}
+@media (min-width:600px){.structure-grid{grid-template-columns:repeat(3,1fr);}}
+@media (min-width:1000px){.structure-grid{grid-template-columns:repeat(5,1fr);}}
+
+.structure-card{
+  position:relative;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;
+  background:var(--bg-soft);border:1px solid rgba(255,212,0,.15);
+  transition:transform var(--trans-mid),box-shadow var(--trans-mid);
+}
+.structure-card:hover,.structure-card:focus-visible{
+  transform:translateY(-6px);
+  box-shadow:0 0 0 2px var(--yellow),0 18px 36px rgba(0,0,0,.6);
+}
+.structure-photo{aspect-ratio:3/4;background:linear-gradient(135deg,#1b1b1b,#0a0a0a);position:relative;overflow:hidden;}
+.structure-photo img{width:100%;height:100%;object-fit:cover;transition:transform var(--trans-mid);}
+.structure-card:hover .structure-photo img{transform:scale(1.06);}
+.structure-photo.placeholder::after{
+  content:'👤';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:2rem;opacity:.35;
+}
+.structure-role-badge{
+  position:absolute;top:8px;left:8px;background:var(--yellow);color:#000;
+  font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
+  padding:3px 8px;border-radius:20px;
+}
+.structure-info{padding:10px;}
+.structure-name{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.structure-jabatan{font-size:.72rem;color:var(--yellow);margin-top:2px;}
+
+/* ---------- MEMBERS GRID ---------- */
+.members-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (min-width:560px){.members-grid{grid-template-columns:repeat(3,1fr);}}
+@media (min-width:780px){.members-grid{grid-template-columns:repeat(4,1fr);}}
+@media (min-width:1080px){.members-grid{grid-template-columns:repeat(6,1fr);}}
+
+.member-card{text-align:center;cursor:pointer;transition:transform var(--trans-mid);}
+.member-card:hover,.member-card:focus-visible{transform:translateY(-4px);}
+.member-avatar{
+  width:100%;aspect-ratio:1/1;border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,#1b1b1b,#0a0a0a);overflow:hidden;
+  border:2px solid transparent;transition:border-color var(--trans);position:relative;
+}
+.member-card:hover .member-avatar,.member-card:focus-visible .member-avatar{border-color:var(--yellow);}
+.member-avatar img{width:100%;height:100%;object-fit:cover;}
+.member-avatar.placeholder::after{
+  content:'🙂';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;opacity:.35;
+}
+.avatar-fallback-text{
+  position:absolute;bottom:6px;left:0;right:0;text-align:center;
+  font-size:.58rem;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;
+}
+.member-name{
+  margin-top:8px;font-size:.82rem;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-transform:uppercase;letter-spacing:.3px;
+  }
+.member-nickname{font-size:.72rem;color:var(--gray);}
+
+/* ---------- GALLERY (grid + lightbox) ---------- */
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media (min-width:600px){.gallery-grid{grid-template-columns:repeat(3,1fr);}}
+@media (min-width:1000px){.gallery-grid{grid-template-columns:repeat(4,1fr);}}
+
+.gallery-item{
+  aspect-ratio:1/1;border-radius:var(--radius);overflow:hidden;cursor:pointer;
+  background:linear-gradient(135deg,#1b1b1b,#0a0a0a);position:relative;
+  transition:transform var(--trans-mid);
+}
+.gallery-item:hover,.gallery-item:focus-visible{transform:scale(1.03);}
+.gallery-item img{width:100%;height:100%;object-fit:cover;}
+.gallery-item.placeholder::after{
+  content:'📷';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;opacity:.35;
+}
+
+.lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:3000;
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.lightbox.open{display:flex;animation:fadeIn var(--trans) ease;}
+.lightbox-img-wrap{max-width:900px;width:100%;text-align:center;}
+.lightbox-img-wrap img{max-height:80vh;margin:0 auto;border-radius:var(--radius);object-fit:contain;}
+.lightbox-caption{margin-top:12px;color:var(--gray);font-size:.85rem;}
+.lightbox-close,.lightbox-prev,.lightbox-next{
+  position:fixed;background:rgba(255,255,255,.08);border:none;color:#fff;
+  border-radius:50%;cursor:pointer;transition:background var(--trans);
+  display:flex;align-items:center;justify-content:center;
+}
+.lightbox-close{top:16px;right:16px;width:40px;height:40px;font-size:1.1rem;}
+.lightbox-close:hover{background:var(--yellow);color:#000;}
+.lightbox-prev,.lightbox-next{top:50%;transform:translateY(-50%);width:44px;height:44px;font-size:1.3rem;}
+.lightbox-prev{left:10px;}
+.lightbox-next{right:10px;}
+.lightbox-prev:hover,.lightbox-next:hover{background:var(--yellow);color:#000;}
+
+/* ---------- MODAL (member/structure detail) ---------- */
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2500;
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal.open{display:flex;animation:fadeIn var(--trans) ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-box{
+  position:relative;background:var(--bg-soft);border:1px solid rgba(255,212,0,.15);
+  border-radius:var(--radius-lg);max-width:460px;width:100%;padding:28px 22px 22px;
+  max-height:90vh;overflow-y:auto;animation:scaleIn var(--trans-mid) ease;
+}
+@keyframes scaleIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+.modal-close{
+  position:absolute;top:14px;right:14px;background:rgba(255,255,255,.08);
+  width:32px;height:32px;border-radius:50%;color:#fff;font-size:1rem;
+  transition:background var(--trans);
+}
+.modal-close:hover{background:var(--yellow);color:#000;}
+.modal-avatar{
+  width:120px;height:120px;border-radius:50%;overflow:hidden;margin:0 auto 16px;
+  background:linear-gradient(135deg,#1b1b1b,#0a0a0a);border:3px solid var(--yellow);
+}
+.modal-avatar img{width:100%;height:100%;object-fit:cover;}
+.modal-name{text-align:center;font-size:1.2rem;font-weight:800;}
+.modal-role{text-align:center;font-size:.82rem;color:var(--yellow);font-weight:700;margin-top:2px;}
+.modal-meta{text-align:center;font-size:.85rem;color:var(--gray);margin-top:2px;}
+.modal-desc{text-align:center;font-size:.88rem;margin-top:14px;color:#eee;}
+
+/* ---------- FOOTER & BACK TO TOP ---------- */
+.footer{text-align:center;padding:40px 24px 90px;color:var(--gray);font-size:.85rem;border-top:1px solid rgba(255,255,255,.08);margin-top:30px;}
+.footer-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#fff;letter-spacing:1px;}
+.footer-title .accent{color:var(--yellow);}
+.back-to-top{
+  position:fixed;bottom:24px;right:24px;width:46px;height:46px;border-radius:50%;
+  background:var(--yellow);color:#000;font-size:1.2rem;
+  box-shadow:0 8px 20px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:opacity var(--trans),transform var(--trans);z-index:900;
+}
+.back-to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+
+.placeholder-note{color:var(--gray);font-size:.85rem;font-style:italic;}
+
+/* ---------- RESPONSIVE TAMBAHAN ---------- */
+@media (max-width:480px){
+  .section{padding:40px 16px;}
+  .poster-card{width:140px;}
+  .poster-card--wide{width:210px;}
+  }
+
+  /* ---------- INSTAGRAM  ---------- */
+  
+  .member-instagram{
+  display:block;font-size:.72rem;color:var(--yellow);font-weight:600;
+  margin-top:2px;transition:opacity var(--trans);
+}
+.member-instagram:hover{opacity:.75;text-decoration:underline;}
+  
+</style>
+</head>
+<!-- PART 2 -->
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">XII TITL<span class="dot">2</span></a>
+
+    <nav class="nav-menu" id="navMenu">
+      <a href="#home">Home</a>
+      <a href="#structure">Structure</a>
+      <a href="#members">Members</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#moments">Class Moments</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="nav-icon-btn" id="searchBtn" aria-label="Cari member">🔍</button>
+      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Buka menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-bar" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Cari nama, nickname, atau jabatan..." autocomplete="off" />
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="home" class="hero">
+  <div class="hero-bg" id="heroBg">
+    <!-- Ganti dengan foto kelas: images/hero-class.jpg -->
+    <img src="images/hero-class.jpg" alt="Foto kelas XII TITL 2" class="hero-img" id="heroImg" />
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">XII TITL <span class="accent">2</span></h1>
+    <p class="hero-desc">Sebuah cerita tentang satu kelas, satu perjalanan, dan kenangan yang tidak akan pernah terulang.</p>
+    <div class="hero-meta">
+      <span><strong id="heroMemberCount">0</strong> Members</span>
+      <span>•</span>
+      <span>Angkatan <strong>2026</strong></span>
+    </div>
+    <div class="hero-actions">
+      <a href="#members" class="btn btn-primary">▶ Explore Class</a>
+      <a href="#members" class="btn btn-secondary">Members</a>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4  -->
+
+<!-- ================= STRUCTURE ================= -->
+<section id="structure" class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Class <span class="accent">Structure</span></h2>
+      <p class="section-sub">The people behind XII TITL 2.</p>
+    </div>
+  </div>
+  <div class="structure-grid" id="structureGrid">
+    <!-- Kartu struktur kelas dirender otomatis oleh JavaScript dari data "structure" -->
+  </div>
+</section>
+
+<!-- ================= MEMBERS ================= -->
+<section id="members" class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Who's <span class="accent">Watching?</span></h2>
+      <p class="section-sub">26 people. One story.</p>
+    </div>
+  </div>
+  <div class="members-grid" id="membersGrid">
+    <!-- Kartu member dirender otomatis oleh JavaScript dari data "members" -->
+  </div>
+</section>
+
+<!-- PART 5 — lanjutan di bawah PART 4 -->
+
+<!-- ================= CLASS CONTENT (kategori ala Netflix) ================= -->
+<section id="moments" class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Our <span class="accent">Class</span></h2>
+      <p class="section-sub">Highlights from our journey.</p>
+    </div>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-btn prev" data-target="ourClassSlider" aria-label="Sebelumnya">‹</button>
+    <div class="slider" id="ourClassSlider"></div>
+    <button class="carousel-btn next" data-target="ourClassSlider" aria-label="Selanjutnya">›</button>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Class <span class="accent">Moments</span></h2>
+      <p class="section-sub">Captured, not staged.</p>
+    </div>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-btn prev" data-target="classMomentsSlider" aria-label="Sebelumnya">‹</button>
+    <div class="slider" id="classMomentsSlider"></div>
+    <button class="carousel-btn next" data-target="classMomentsSlider" aria-label="Selanjutnya">›</button>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Memories</h2>
+      <p class="section-sub">Moments we decided to keep.</p>
+    </div>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-btn prev" data-target="memoriesSlider" aria-label="Sebelumnya">‹</button>
+    <div class="slider" id="memoriesSlider"></div>
+    <button class="carousel-btn next" data-target="memoriesSlider" aria-label="Selanjutnya">›</button>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Events</h2>
+      <p class="section-sub">Special days, remembered.</p>
+    </div>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-btn prev" data-target="eventsSlider" aria-label="Sebelumnya">‹</button>
+    <div class="slider" id="eventsSlider"></div>
+    <button class="carousel-btn next" data-target="eventsSlider" aria-label="Selanjutnya">›</button>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Activities</h2>
+      <p class="section-sub">What we did together.</p>
+    </div>
+  </div>
+  <div class="carousel-wrap">
+    <button class="carousel-btn prev" data-target="activitiesSlider" aria-label="Sebelumnya">‹</button>
+    <div class="slider" id="activitiesSlider"></div>
+    <button class="carousel-btn next" data-target="activitiesSlider" aria-label="Selanjutnya">›</button>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section id="gallery" class="section reveal">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Gallery</h2>
+      <p class="section-sub">Tap a photo to view fullscreen.</p>
+    </div>
+  </div>
+  <div class="gallery-grid" id="galleryGrid">
+    <!-- Foto gallery dirender otomatis dari data "gallery" -->
+  </div>
+</section>
+
+<!-- Lightbox untuk gallery -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">✕</button>
+  <button class="lightbox-prev" id="lightboxPrev" aria-label="Foto sebelumnya">‹</button>
+  <div class="lightbox-img-wrap">
+    <img src="" alt="" id="lightboxImg" />
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+  <button class="lightbox-next" id="lightboxNext" aria-label="Foto selanjutnya">›</button>
+</div>
+
+<!-- PART 6 — lanjutan di bawah PART 5 -->
+
+<!-- ================= MODAL (Member / Structure detail) ================= -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Tutup">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <p class="footer-title">XII TITL <span class="accent">2</span></p>
+  <p>26 people. One story. One class.</p>
+  <p id="footerYear"></p>
+</footer>
+
+<!-- ================= BACK TO TOP ================= -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas">↑</button>
+
+<!-- PART 7 — lanjutan di bawah PART 6, tepat sebelum </body></html> -->
+<script>
+
+/* =========================================================
+   DATA — semua bisa diedit di sini, tidak perlu sentuh HTML/CSS
+   ========================================================= */
+
+/* ---------- STRUCTURE (pengurus kelas) ---------- */
+const structure = [
+  { role: "Wali Kelas",      name: "NAMA WALI KELAS",     image: "images/structure/wali-kelas.jpg" },
+  { role: "Ketua Kelas",     name: "NAMA KETUA KELAS",    image: "images/structure/ketua.jpg" },
+  { role: "Wakil Ketua",     name: "NAMA WAKIL KETUA",    image: "images/structure/wakil-ketua.jpg" },
+  { role: "Sekretaris",      name: "NAMA SEKRETARIS",     image: "images/structure/sekretaris.jpg" },
+  { role: "Bendahara",       name: "NAMA BENDAHARA",      image: "images/structure/bendahara.jpg" },
+];
+
+/* ---------- MEMBERS (26 siswa) ---------- */
+const members = [
+  { number: 1,  name: "Attar Kurnia Ramadhan", instagram: "atrrr00_", role: "Member", description: "", image: "images/members/member-01.jpg" },
+  { number: 2,  name: "Ferianto", instagram: "", role: "Member", description: "", image: "images/members/member-02.jpg" },
+  { number: 3,  name: "Marvelino Haki Febriyanti", instagram: "", role: "Member", description: "", image: "images/members/member-03.jpg" },
+  { number: 4,  name: "Muhammad Afiurrohman", instagram: "", role: "Member", description: "", image: "images/members/member-04.jpg" },
+  { number: 5,  name: "Muhammad Al Nubair Nashralloh", instagram: "", role: "Member", description: "", image: "images/members/member-05.jpg" },
+  { number: 6,  name: "Muhammad Fatkhurrifqi", instagram: "", role: "Member", description: "", image: "images/members/member-06.jpg" },
+  { number: 7,  name: "Muhammad Nanang Zakariya", instagram: "", role: "Member", description: "", image: "images/members/member-07.jpg" },
+  { number: 8,  name: "Muhammad Nur Robby", instagram: "", role: "Member", description: "", image: "images/members/member-08.jpg" },
+  { number: 9,  name: "Muhammad Rafi Al Habib", instagram: "", role: "Member", description: "", image: "images/members/member-09.jpg" },
+  { number: 10, name: "Muhammad Rizky Alvandi Setiawan", instagram: "", role: "Member", description: "", image: "images/members/member-10.jpg" },
+  { number: 11, name: "Muhammad Samsul Ma'arif", instagram: "", role: "Member", description: "", image: "images/members/member-11.jpg" },
+  { number: 12, name: "Muhammad Steven Akbar", instagram: "", role: "Member", description: "", image: "images/members/member-12.jpg" },
+  { number: 13, name: "Muhammad Syahrico Putra Pratama", instagram: "", role: "Member", description: "", image: "images/members/member-13.jpg" },
+  { number: 14, name: "Nicolas Aji Wijaya", instagram: "", role: "Member", description: "", image: "images/members/member-14.jpg" },
+  { number: 15, name: "Octa As'ad Ivandy", instagram: "", role: "Member", description: "", image: "images/members/member-15.jpg" },
+  { number: 16, name: "Rafel Ferdian Dwi Herman Syah", instagram: "", role: "Member", description: "", image: "images/members/member-16.jpg" },
+  { number: 17, name: "Raihaan Rizqi Rochmatullah", instagram: "", role: "Member", description: "", image: "images/members/member-17.jpg" },
+  { number: 18, name: "Rendy Ramadhani", instagram: "", role: "Member", description: "", image: "images/members/member-18.jpg" },
+  { number: 19, name: "Rendy Setyawan", instagram: "", role: "Member", description: "", image: "images/members/member-19.jpg" },
+  { number: 20, name: "Reygan Andi Prasetyo", instagram: "", role: "Member", description: "", image: "images/members/member-20.jpg" },
+  { number: 21, name: "Rian Dwi Andika", instagram: "", role: "Member", description: "", image: "images/members/member-21.jpg" },
+  { number: 22, name: "Rico Saputra", instagram: "coothegod", role: "Member", description: "", image: "images/members/member-22.jpg" },
+  { number: 23, name: "Shava Hidayat", instagram: "", role: "Member", description: "", image: "images/members/member-23.jpg" },
+  { number: 24, name: "Yesi Putra Mulya Agung", instagram: "", role: "Member", description: "", image: "images/members/member-24.jpg" },
+  { number: 25, name: "Yoga Saputra", instagram: "", role: "Member", description: "", image: "images/members/member-25.jpg" },
+  { number: 26, name: "Yudi Ahmad Airlangga", instagram: "", role: "Member", description: "", image: "images/members/member-26.jpg" },
+];
+
+/* =========================================================
+   DATA — kategori ala Netflix (Class Content)
+   ---------------------------------------------------------
+   Tiap kategori adalah array card dengan title + image.
+   Bebas tambah/kurangi jumlah slot, tinggal tambah/hapus object.
+   ========================================================= */
+
+const ourClass = [
+  { title: "Our Class 01", image: "images/our-class/our-class-01.jpg" },
+  { title: "Our Class 02", image: "images/our-class/our-class-02.jpg" },
+  { title: "Our Class 03", image: "images/our-class/our-class-03.jpg" },
+  { title: "Our Class 04", image: "images/our-class/our-class-04.jpg" },
+  { title: "Our Class 05", image: "images/our-class/our-class-05.jpg" },
+  { title: "Our Class 06", image: "images/our-class/our-class-06.jpg" },
+];
+
+const classMoments = [
+  { title: "Class Moment 01", image: "images/class-moments/class-moments-01.jpg" },
+  { title: "Class Moment 02", image: "images/class-moments/class-moments-02.jpg" },
+  { title: "Class Moment 03", image: "images/class-moments/class-moments-03.jpg" },
+  { title: "Class Moment 04", image: "images/class-moments/class-moments-04.jpg" },
+  { title: "Class Moment 05", image: "images/class-moments/class-moments-05.jpg" },
+  { title: "Class Moment 06", image: "images/class-moments/class-moments-06.jpg" },
+];
+
+const memories = [
+  { title: "Memory 01", image: "images/memories/memories-01.jpg" },
+  { title: "Memory 02", image: "images/memories/memories-02.jpg" },
+  { title: "Memory 03", image: "images/memories/memories-03.jpg" },
+  { title: "Memory 04", image: "images/memories/memories-04.jpg" },
+  { title: "Memory 05", image: "images/memories/memories-05.jpg" },
+  { title: "Memory 06", image: "images/memories/memories-06.jpg" },
+];
+
+const events = [
+  { title: "Event 01", image: "images/events/events-01.jpg" },
+  { title: "Event 02", image: "images/events/events-02.jpg" },
+  { title: "Event 03", image: "images/events/events-03.jpg" },
+  { title: "Event 04", image: "images/events/events-04.jpg" },
+  { title: "Event 05", image: "images/events/events-05.jpg" },
+  { title: "Event 06", image: "images/events/events-06.jpg" },
+];
+
+const activities = [
+  { title: "Activity 01", image: "images/activities/activities-01.jpg" },
+  { title: "Activity 02", image: "images/activities/activities-02.jpg" },
+  { title: "Activity 03", image: "images/activities/activities-03.jpg" },
+  { title: "Activity 04", image: "images/activities/activities-04.jpg" },
+  { title: "Activity 05", image: "images/activities/activities-05.jpg" },
+  { title: "Activity 06", image: "images/activities/activities-06.jpg" },
+];
+
+/* ---------- GALLERY (grid + lightbox) ---------- */
+const gallery = [
+  { caption: "Gallery Photo 01", image: "images/gallery/gallery-01.jpg" },
+  { caption: "Gallery Photo 02", image: "images/gallery/gallery-02.jpg" },
+  { caption: "Gallery Photo 03", image: "images/gallery/gallery-03.jpg" },
+  { caption: "Gallery Photo 04", image: "images/gallery/gallery-04.jpg" },
+  { caption: "Gallery Photo 05", image: "images/gallery/gallery-05.jpg" },
+  { caption: "Gallery Photo 06", image: "images/gallery/gallery-06.jpg" },
+  { caption: "Gallery Photo 07", image: "images/gallery/gallery-07.jpg" },
+  { caption: "Gallery Photo 08", image: "images/gallery/gallery-08.jpg" },
+];
+
+<!-- PART 9 -->
+
+/* =========================================================
+   HELPER UMUM
+   ========================================================= */
+function el(tag, className, html) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (html !== undefined) node.innerHTML = html;
+  return node;
+}
+
+function attachImageFallback(imgEl, wrapperEl, placeholderClass) {
+  imgEl.addEventListener('error', () => {
+    imgEl.style.display = 'none';
+    wrapperEl.classList.add(placeholderClass);
+  });
+}
+
+function createFallbackImage(src, alt, wrapperEl, placeholderClass) {
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.loading = 'lazy';
+  attachImageFallback(img, wrapperEl, placeholderClass);
+  return img;
+}
+
+
+/* =========================================================
+   RENDER: STRUCTURE
+   ========================================================= */
+function renderStructure(list) {
+  const grid = document.getElementById('structureGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  list.forEach((person) => {
+    const card = el('div', 'structure-card');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+
+    const photoWrap = el('div', 'structure-photo');
+    const img = createFallbackImage(person.image, person.name, photoWrap, 'placeholder');
+    photoWrap.appendChild(img);
+    photoWrap.appendChild(el('span', 'structure-role-badge', person.role));
+
+    const info = el('div', 'structure-info');
+    info.appendChild(el('p', 'structure-name', person.name));
+    info.appendChild(el('p', 'structure-jabatan', person.role));
+
+    card.appendChild(photoWrap);
+    card.appendChild(info);
+
+    const openHandler = () => openPersonModal(person, person.role);
+    card.addEventListener('click', openHandler);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openHandler(); });
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   RENDER: MEMBERS
+   ========================================================= */
+function renderMembers(list) {
+  const grid = document.getElementById('membersGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  list.forEach((member) => {
+    const card = el('div', 'member-card');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.dataset.name = member.name.toLowerCase();
+    card.dataset.nickname = (member.nickname || '').toLowerCase();
+    card.dataset.role = (member.role || '').toLowerCase();
+
+    const avatarWrap = el('div', 'member-avatar');
+    const img = createFallbackImage(member.image, member.name, avatarWrap, 'placeholder');
+    avatarWrap.appendChild(img);
+
+    img.addEventListener('error', () => {
+      avatarWrap.appendChild(el('span', 'avatar-fallback-text', 'No Photo'));
+    });
+
+    card.appendChild(avatarWrap);
+    card.appendChild(el('p', 'member-name', member.name));
+
+if (member.instagram) {
+  const cleanUsername = member.instagram
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+    .split('?')[0]
+    .replace(/\/$/, '');
+
+  const igLink = el('a', 'member-instagram', `@${cleanUsername}`);
+  igLink.href = `https://instagram.com/${cleanUsername}`;
+  igLink.target = '_blank';
+  igLink.rel = 'noopener noreferrer';
+  igLink.addEventListener('click', (e) => e.stopPropagation());
+  card.appendChild(igLink);
+} else {
+  card.appendChild(el('p', 'member-nickname', `No. ${member.number}`));
+}
+
+    const openHandler = () => openPersonModal(member, member.role);
+    card.addEventListener('click', openHandler);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openHandler(); });
+
+    grid.appendChild(card);
+  });
+
+  const countEl = document.getElementById('heroMemberCount');
+  if (countEl) countEl.textContent = list.length;
+}
+
+
+/* =========================================================
+   RENDER: KATEGORI ALA NETFLIX (slider)
+   ========================================================= */
+function renderCategorySlider(containerId, list, wide) {
+  const slider = document.getElementById(containerId);
+  if (!slider) return;
+  slider.innerHTML = '';
+
+  list.forEach((item, index) => {
+    const card = el('div', `poster-card slider-item${wide ? ' poster-card--wide' : ''}`);
+    card.tabIndex = 0;
+
+    const imgWrap = el('div', 'poster-img-wrap');
+    const img = createFallbackImage(item.image, item.title, imgWrap, 'placeholder');
+    imgWrap.appendChild(img);
+
+    const caption = el('div', 'poster-caption');
+    caption.appendChild(el('p', 'poster-title', item.title));
+
+    card.appendChild(imgWrap);
+    card.appendChild(caption);
+
+    const openHandler = () => openGalleryLightbox(list, index, item.title);
+    card.addEventListener('click', openHandler);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openHandler(); });
+
+    slider.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   RENDER: GALLERY GRID
+   ========================================================= */
+function renderGallery(list) {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  list.forEach((item, index) => {
+    const cell = el('div', 'gallery-item');
+    cell.tabIndex = 0;
+    const img = createFallbackImage(item.image, item.caption, cell, 'placeholder');
+    cell.appendChild(img);
+
+    const openHandler = () => openGalleryLightbox(list, index, item.caption);
+    cell.addEventListener('click', openHandler);
+    cell.addEventListener('keydown', (e) => { if (e.key === 'Enter') openHandler(); });
+
+    grid.appendChild(cell);
+  });
+}
+
+
+/* =========================================================
+   MODAL: DETAIL MEMBER / STRUCTURE
+   ========================================================= */
+let lastFocusedEl = null;
+
+function openPersonModal(person, roleLabel) {
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modalContent');
+  if (!modal || !content) return;
+
+  content.innerHTML = '';
+
+  const avatarWrap = el('div', 'modal-avatar');
+  const img = createFallbackImage(person.image, person.name, avatarWrap, 'placeholder');
+  avatarWrap.appendChild(img);
+
+  content.appendChild(avatarWrap);
+  content.appendChild(el('p', 'modal-name', person.name));
+  if (roleLabel) content.appendChild(el('p', 'modal-role', roleLabel));
+  
+  if (person.instagram) {
+  const cleanUsernameModal = person.instagram
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+    .split('?')[0]
+    .replace(/\/$/, '');
+
+  const igLinkModal = el('a', 'modal-meta', `📷 @${cleanUsernameModal}`);
+  igLinkModal.href = `https://instagram.com/${cleanUsernameModal}`;
+  igLinkModal.target = '_blank';
+  igLinkModal.rel = 'noopener noreferrer';
+  content.appendChild(igLinkModal);
+}
+  
+  if (person.description) content.appendChild(el('p', 'modal-desc', person.description));
+
+  openModal();
+}
+
+function openModal() {
+  const modal = document.getElementById('modal');
+  if (!modal) return;
+  lastFocusedEl = document.activeElement;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  const closeBtn = document.getElementById('modalClose');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  if (lastFocusedEl) lastFocusedEl.focus();
+}
+
+
+/* =========================================================
+   LIGHTBOX: GALLERY FULLSCREEN + NEXT/PREV
+   ========================================================= */
+let lightboxList = [];
+let lightboxIndex = 0;
+
+function openGalleryLightbox(list, index, captionOverride) {
+  lightboxList = list;
+  lightboxIndex = index;
+  updateLightbox(captionOverride);
+
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden', 'false');
+}
+
+function updateLightbox(captionOverride) {
+  const item = lightboxList[lightboxIndex];
+  const img = document.getElementById('lightboxImg');
+  const caption = document.getElementById('lightboxCaption');
+  if (!item || !img || !caption) return;
+
+  img.src = item.image;
+  img.alt = item.title || item.caption || '';
+  caption.textContent = captionOverride || item.title || item.caption || '';
+}
+
+function closeLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+}
+
+function lightboxNext() {
+  lightboxIndex = (lightboxIndex + 1) % lightboxList.length;
+  updateLightbox();
+}
+
+function lightboxPrev() {
+  lightboxIndex = (lightboxIndex - 1 + lightboxList.length) % lightboxList.length;
+  updateLightbox();
+}
+
+
+/* =========================================================
+   SEARCH (members)
+   ========================================================= */
+function initSearch() {
+  const searchBtn = document.getElementById('searchBtn');
+  const searchBar = document.getElementById('searchBar');
+  const searchInput = document.getElementById('searchInput');
+  if (!searchBtn || !searchBar || !searchInput) return;
+
+  searchBtn.addEventListener('click', () => {
+    searchBar.classList.toggle('open');
+    if (searchBar.classList.contains('open')) searchInput.focus();
+  });
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll('#membersGrid .member-card').forEach((card) => {
+      const match =
+        query === '' ||
+        card.dataset.name.includes(query) ||
+        card.dataset.nickname.includes(query) ||
+        card.dataset.role.includes(query);
+      card.style.display = match ? '' : 'none';
+    });
+  });
+}
+
+
+/* =========================================================
+   CAROUSEL (tombol prev/next)
+   ========================================================= */
+function initCarousels() {
+  document.querySelectorAll('.carousel-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const slider = document.getElementById(btn.dataset.target);
+      if (!slider) return;
+      const scrollAmount = slider.clientWidth * 0.8;
+      slider.scrollBy({
+        left: btn.classList.contains('next') ? scrollAmount : -scrollAmount,
+        behavior: 'smooth',
+      });
+    });
+  });
+}
+
+
+/* =========================================================
+   REVEAL ANIMATION (muncul saat section terlihat)
+   ========================================================= */
+function initReveal() {
+  const targets = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach((t) => t.classList.add('in-view'));
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  targets.forEach((t) => observer.observe(t));
+}
+
+
+/* =========================================================
+   NAVBAR SCROLL, HAMBURGER, BACK TO TOP, MODAL/LIGHTBOX EVENTS
+   ========================================================= */
+function initUi() {
+  const navbar = document.getElementById('navbar');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMenu = document.getElementById('navMenu');
+  const backToTop = document.getElementById('backToTop');
+  const modal = document.getElementById('modal');
+  const modalClose = document.getElementById('modalClose');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxNextBtn = document.getElementById('lightboxNext');
+  const lightboxPrevBtn = document.getElementById('lightboxPrev');
+  const footerYear = document.getElementById('footerYear');
+  const heroImg = document.getElementById('heroImg');
+  const heroBg = document.getElementById('heroBg');
+
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    if (backToTop) backToTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  if (hamburgerBtn && navMenu) {
+    hamburgerBtn.addEventListener('click', () => {
+      hamburgerBtn.classList.toggle('open');
+      navMenu.classList.toggle('open');
+    });
+    navMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        hamburgerBtn.classList.remove('open');
+        navMenu.classList.remove('open');
+      });
+    });
+  }
+
+  if (backToTop) {
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  if (modal && modalClose) {
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  }
+
+  if (lightbox) {
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxNextBtn.addEventListener('click', lightboxNext);
+    lightboxPrevBtn.addEventListener('click', lightboxPrev);
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (modal && modal.classList.contains('open')) closeModal();
+      if (lightbox && lightbox.classList.contains('open')) closeLightbox();
+    }
+    if (lightbox && lightbox.classList.contains('open')) {
+      if (e.key === 'ArrowRight') lightboxNext();
+      if (e.key === 'ArrowLeft') lightboxPrev();
+    }
+  });
+
+  if (footerYear) footerYear.textContent = `© ${new Date().getFullYear()} XII TITL 2`;
+
+  if (heroImg) {
+    heroImg.addEventListener('error', () => {
+      heroImg.style.display = 'none';
+      heroBg.classList.add('placeholder');
+    });
+  }
+}
+
+
+/* =========================================================
+   INISIALISASI
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  renderStructure(structure);
+  renderMembers(members);
+
+  renderCategorySlider('ourClassSlider', ourClass, true);
+  renderCategorySlider('classMomentsSlider', classMoments, true);
+  renderCategorySlider('memoriesSlider', memories, true);
+  renderCategorySlider('eventsSlider', events, true);
+  renderCategorySlider('activitiesSlider', activities, true);
+
+  renderGallery(gallery);
+
+  initSearch();
+  initCarousels();
+  initReveal();
+  initUi();
+});
+
+</script>
+</body>
+</html>
