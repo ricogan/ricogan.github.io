@@ -1,549 +1,414 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hell nah</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<!-- ================= CSS ================= -->
+<style>
+  * {
+    box-sizing: border-box;
+  }
 
-    <title>XII TITL II — KAMI PAMIT</title>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5e5e5;
+    font-family: Arial, Helvetica, sans-serif;
+  }
 
-    <meta
-        name="description"
-        content="Website XII TITL II — SMK Raden Paku Wringinanom"
-    >
+  .calculator {
+    width: 320px;
+    max-width: 95vw;
+    background: #2b2b2b;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  /* Layar display */
+  .display {
+    background: #1c1c1c;
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px 16px;
+    margin-bottom: 12px;
+    text-align: right;
+    word-break: break-all;
+  }
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
+  .display .previous {
+    font-size: 14px;
+    color: #aaa;
+    min-height: 18px;
+  }
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+  .display .current {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 4px;
+  }
+
+  /* Grid tombol */
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  button {
+    padding: 18px 0;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #444;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  button:hover {
+    background: #555;
+  }
+
+  button:active {
+    background: #666;
+  }
+
+  /* Tombol operator */
+  .btn-operator {
+    background: #ff9500;
+  }
+  .btn-operator:hover {
+    background: #ffab33;
+  }
+
+  /* Tombol sama dengan */
+  .btn-equal {
+    background: #ff9500;
+    grid-column: span 2;
+  }
+
+  /* Tombol fungsi (AC, backspace, %) */
+  .btn-function {
+    background: #a5a5a5;
+    color: #000;
+  }
+  .btn-function:hover {
+    background: #b8b8b8;
+  }
+
+  /* Tombol angka 0 lebih lebar */
+  .btn-zero {
+    grid-column: span 2;
+  }
+
+  /* Responsive untuk layar kecil */
+  @media (max-width: 360px) {
+    .display .current {
+      font-size: 26px;
+    }
+    button {
+      padding: 14px 0;
+      font-size: 16px;
+    }
+  }
+</style>
 </head>
-
 <body>
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
-
-    <header class="navbar">
-
-        <a href="#home" class="logo">
-            XII<span>TITL</span>II
-        </a>
-
-        <nav class="nav-links">
-
-            <a href="#home">Home</a>
-
-            <a href="#members">Members</a>
-
-            <a href="#follow">Follow Us</a>
-
-            <a href="#structure">Structure</a>
-
-            <a href="#memories">Memories</a>
-
-        </nav>
-
-        <button class="menu-btn" id="menuBtn">
-            ☰
-        </button>
-
-    </header>
-
-
-    <!-- =========================
-         MAIN
-    ========================== -->
-
-    <main>
-
-
-        <!-- =========================
-             HERO / HOME
-        ========================== -->
-
-        <section id="home" class="hero">
-
-            <div class="hero-background">
-
-                <!--
-                    Nanti foto bersama kelas
-                    ditaruh di:
-
-                    assets/images/hero.jpg
-                -->
-
-                <img
-                    src="assets/images/hero.jpg"
-                    alt="Foto bersama XII TITL II"
-                >
-
-            </div>
-
-
-            <div class="hero-overlay"></div>
-
-
-            <div class="hero-content">
-
-                <div class="hero-label">
-                    XII TITL II ORIGINAL
-                </div>
-
-
-                <h1>
-                    KAMI<br>
-                    PAMIT
-                </h1>
-
-
-                <p class="hero-description">
-
-                    Sebuah cerita tentang 26 orang,
-                    satu kelas, dan begitu banyak
-                    kenangan yang tidak akan pernah
-                    terulang.
-
-                </p>
-
-
-                <div class="hero-meta">
-
-                    <span>2026</span>
-
-                    <span>•</span>
-
-                    <span>26 MEMBERS</span>
-
-                    <span>•</span>
-
-                    <span>FINAL CHAPTER</span>
-
-                </div>
-
-
-                <div class="hero-buttons">
-
-                    <a
-                        href="#members"
-                        class="btn btn-primary"
-                    >
-                        ▶ EXPLORE CLASS
-                    </a>
-
-
-                    <a
-                        href="#memories"
-                        class="btn btn-secondary"
-                    >
-                        + OUR MEMORIES
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             MEMBERS
-        ========================== -->
-
-        <section
-            id="members"
-            class="section"
-        >
-
-            <div class="section-heading">
-
-                <span class="section-number">
-                    01
-                </span>
-
-                <h2>
-                    MEMBERS
-                </h2>
-
-                <p>
-                    26 people. One story.
-                </p>
-
-            </div>
-
-
-            <div
-                class="members-grid"
-                id="membersGrid"
-            >
-
-                <!--
-                    26 siswa nanti otomatis
-                    dimasukkan oleh JavaScript.
-                -->
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             FOLLOW US
-        ========================== -->
-
-        <section
-            id="follow"
-            class="section"
-        >
-
-            <div class="section-heading">
-
-                <span class="section-number">
-                    02
-                </span>
-
-                <h2>
-                    FOLLOW US
-                </h2>
-
-                <p>
-                    Find us beyond the classroom.
-                </p>
-
-            </div>
-
-
-            <button
-                class="follow-main"
-                id="followMain"
-            >
-
-                <span>
-                    OUR INSTAGRAM
-                </span>
-
-                <strong>
-                    VIEW 26 MEMBERS →
-                </strong>
-
-            </button>
-
-
-            <div
-                class="instagram-list"
-                id="instagramList"
-            >
-
-                <!--
-                    Instagram 26 siswa
-                    nanti dibuat otomatis.
-                -->
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             STRUCTURE
-        ========================== -->
-
-        <section
-            id="structure"
-            class="section"
-        >
-
-            <div class="section-heading">
-
-                <span class="section-number">
-                    03
-                </span>
-
-                <h2>
-                    STRUCTURE
-                </h2>
-
-                <p>
-                    The people behind XII TITL II.
-                </p>
-
-            </div>
-
-
-            <div
-                class="structure-grid"
-                id="structureGrid"
-            >
-
-                <!--
-                    Wali kelas,
-                    ketua,
-                    wakil,
-                    sekretaris,
-                    bendahara
-                    nanti dimasukkan dari data.
-                -->
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             MEMORIES
-        ========================== -->
-
-        <section
-            id="memories"
-            class="section"
-        >
-
-            <div class="section-heading">
-
-                <span class="section-number">
-                    04
-                </span>
-
-                <h2>
-                    MEMORIES
-                </h2>
-
-                <p>
-                    Moments we decided to keep.
-                </p>
-
-            </div>
-
-
-            <div
-                class="memory-grid"
-                id="memoryGrid"
-            >
-
-                <!--
-                    Foto memories nanti
-                    dibuat otomatis.
-
-                    Bisa portrait maupun
-                    landscape.
-                -->
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             OUR STORY
-        ========================== -->
-
-        <section
-            id="story"
-            class="section story-section"
-        >
-
-            <div class="section-heading">
-
-                <span class="section-number">
-                    05
-                </span>
-
-                <h2>
-                    OUR STORY
-                </h2>
-
-                <p>
-                    Every ending has a beginning.
-                </p>
-
-            </div>
-
-
-            <div class="story-line">
-
-                <article class="story-item">
-
-                    <span>
-                        2026
-                    </span>
-
-                    <h3>
-                        THE BEGINNING
-                    </h3>
-
-                    <p>
-                        Awal perjalanan XII TITL II.
-                    </p>
-
-                </article>
-
-
-                <article class="story-item">
-
-                    <span>
-                        2027
-                    </span>
-
-                    <h3>
-                        THE JOURNEY
-                    </h3>
-
-                    <p>
-                        Sekolah, praktik, PKL,
-                        kegiatan dan berbagai
-                        cerita bersama.
-                    </p>
-
-                </article>
-
-
-                <article class="story-item">
-
-                    <span>
-                        2028
-                    </span>
-
-                    <h3>
-                        THE FINAL CHAPTER
-                    </h3>
-
-                    <p>
-                        Satu kelas, satu kenangan,
-                        sebelum akhirnya kita
-                        berjalan masing-masing.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             FINAL
-        ========================== -->
-
-        <section class="final-section">
-
-            <div class="final-content">
-
-                <span>
-                    XII TITL II
-                </span>
-
-                <h2>
-                    KAMI PAMIT.
-                </h2>
-
-                <p>
-                    BUT THE MEMORIES STAY.
-                </p>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- =========================
-         MODAL
-    ========================== -->
-
-    <div
-        class="modal"
-        id="modal"
-    >
-
-        <div class="modal-box">
-
-            <button
-                class="modal-close"
-                id="modalClose"
-            >
-                ×
-            </button>
-
-
-            <img
-                id="modalImage"
-                src=""
-                alt=""
-            >
-
-
-            <div class="modal-info">
-
-                <span id="modalNumber"></span>
-
-                <h2 id="modalName"></h2>
-
-                <p id="modalRole"></p>
-
-                <a
-                    id="modalInstagram"
-                    href="#"
-                    target="_blank"
-                >
-                    Instagram →
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer>
-
-        <strong>
-            XII TITL II
-        </strong>
-
-        <p>
-            SMK Raden Paku Wringinanom
-        </p>
-
-        <small>
-            © <span id="year"></span>
-            XII TITL II
-        </small>
-
-    </footer>
-
-
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
-
-    <script src="js/data.js"></script>
-
-    <script src="js/script.js"></script>
+<!-- ================= HTML ================= -->
+<div class="calculator">
+  <div class="display">
+    <div class="previous" id="previousDisplay"></div>
+    <div class="current" id="currentDisplay">0</div>
+  </div>
+
+  <div class="buttons">
+    <button class="btn-function" data-action="clear">AC</button>
+    <button class="btn-function" data-action="backspace">⌫</button>
+    <button class="btn-function" data-action="percent">%</button>
+    <button class="btn-operator" data-action="operator" data-value="÷">÷</button>
+
+    <button data-action="number" data-value="7">7</button>
+    <button data-action="number" data-value="8">8</button>
+    <button data-action="number" data-value="9">9</button>
+    <button class="btn-operator" data-action="operator" data-value="×">×</button>
+
+    <button data-action="number" data-value="4">4</button>
+    <button data-action="number" data-value="5">5</button>
+    <button data-action="number" data-value="6">6</button>
+    <button class="btn-operator" data-action="operator" data-value="−">−</button>
+
+    <button data-action="number" data-value="1">1</button>
+    <button data-action="number" data-value="2">2</button>
+    <button data-action="number" data-value="3">3</button>
+    <button class="btn-operator" data-action="operator" data-value="+">+</button>
+
+    <button class="btn-zero" data-action="number" data-value="0">0</button>
+    <button data-action="decimal">.</button>
+    <button class="btn-equal" data-action="equal">=</button>
+  </div>
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+  // Batas maksimum hasil yang boleh ditampilkan secara normal
+  const MAX_LIMIT = 100000000; // 100 juta
+  const OVERFLOW_MESSAGE = "idk, ask chatgpt gng";
+
+  // Elemen display
+  const previousDisplay = document.getElementById('previousDisplay');
+  const currentDisplay = document.getElementById('currentDisplay');
+
+  // State kalkulator
+  let currentValue = '0';      // angka yang sedang diketik
+  let previousValue = null;    // angka sebelumnya (sebelum operator ditekan)
+  let operator = null;         // operator yang dipilih (+, −, ×, ÷)
+  let resetNext = false;       // flag: layar current harus direset saat angka baru diketik
+  let errorState = false;      // flag: sedang menampilkan pesan error
+
+  // ---------- Fungsi bantu format angka ----------
+  function formatNumber(numStr) {
+    // Pisahkan bagian bulat dan desimal untuk diberi pemisah ribuan
+    if (numStr === '' || numStr === '-') return numStr;
+    let [intPart, decPart] = numStr.split('.');
+    const isNegative = intPart.startsWith('-');
+    if (isNegative) intPart = intPart.slice(1);
+    intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    let result = (isNegative ? '-' : '') + intPart;
+    if (decPart !== undefined) result += ',' + decPart;
+    return result;
+  }
+
+  // ---------- Update tampilan ----------
+  function updateDisplay() {
+    currentDisplay.textContent = formatNumber(currentValue);
+    if (operator && previousValue !== null) {
+      previousDisplay.textContent = formatNumber(previousValue) + ' ' + operator;
+    } else {
+      previousDisplay.textContent = '';
+    }
+  }
+
+  // ---------- Reset total (AC) ----------
+  function clearAll() {
+    currentValue = '0';
+    previousValue = null;
+    operator = null;
+    resetNext = false;
+    errorState = false;
+    updateDisplay();
+  }
+
+  // ---------- Backspace ----------
+  function backspace() {
+    if (errorState) {
+      clearAll();
+      return;
+    }
+    if (currentValue.length <= 1 || (currentValue.length === 2 && currentValue.startsWith('-'))) {
+      currentValue = '0';
+    } else {
+      currentValue = currentValue.slice(0, -1);
+    }
+    updateDisplay();
+  }
+
+  // ---------- Input angka ----------
+  function inputNumber(num) {
+    if (errorState) {
+      // Jika sedang error, ketik angka baru akan memulai dari awal
+      clearAll();
+    }
+    if (resetNext) {
+      currentValue = num;
+      resetNext = false;
+    } else {
+      if (currentValue === '0') {
+        currentValue = num;
+      } else {
+        // Batasi panjang digit agar tidak menyebabkan angka tak wajar
+        if (currentValue.replace('-', '').replace('.', '').length >= 15) return;
+        currentValue += num;
+      }
+    }
+    updateDisplay();
+  }
+
+  // ---------- Input titik desimal ----------
+  function inputDecimal() {
+    if (errorState) clearAll();
+    if (resetNext) {
+      currentValue = '0.';
+      resetNext = false;
+      updateDisplay();
+      return;
+    }
+    if (!currentValue.includes('.')) {
+      currentValue += '.';
+      updateDisplay();
+    }
+  }
+
+  // ---------- Pilih operator ----------
+  function chooseOperator(op) {
+    if (errorState) return;
+
+    if (operator !== null && !resetNext) {
+      // Jika sudah ada operator tertunda dan user mengetik angka baru,
+      // hitung dulu hasil sebelumnya (mendukung operasi berurutan)
+      calculate();
+    }
+
+    previousValue = currentValue;
+    operator = op;
+    resetNext = true;
+    updateDisplay();
+  }
+
+  // ---------- Persentase ----------
+  function inputPercent() {
+    if (errorState) return;
+    const value = parseFloat(currentValue);
+    if (isNaN(value)) return;
+    currentValue = String(value / 100);
+    updateDisplay();
+  }
+
+  // ---------- Proses perhitungan ----------
+  function calculate() {
+    if (operator === null || previousValue === null) return;
+
+    const prev = parseFloat(previousValue);
+    const curr = parseFloat(currentValue);
+
+    if (isNaN(prev) || isNaN(curr)) {
+      showError('Input tidak valid');
+      return;
+    }
+
+    let result;
+    switch (operator) {
+      case '+':
+        result = prev + curr;
+        break;
+      case '−':
+        result = prev - curr;
+        break;
+      case '×':
+        result = prev * curr;
+        break;
+      case '÷':
+        if (curr === 0) {
+          showError('Cannot divide by zero');
+          return;
+        }
+        result = prev / curr;
+        break;
+      default:
+        return;
+    }
+
+    // Cek apakah hasil tidak wajar (Infinity, NaN, atau melebihi batas)
+    if (!isFinite(result) || isNaN(result)) {
+      showError(OVERFLOW_MESSAGE, true);
+      return;
+    }
+
+    if (Math.abs(result) >= MAX_LIMIT) {
+      showError(OVERFLOW_MESSAGE, true);
+      return;
+    }
+
+    // Bulatkan untuk menghindari masalah floating point (misal 0.1 + 0.2)
+    result = Math.round((result + Number.EPSILON) * 1e10) / 1e10;
+
+    currentValue = String(result);
+    operator = null;
+    previousValue = null;
+    resetNext = true;
+    updateDisplay();
+  }
+
+  // ---------- Tampilkan pesan error ----------
+  function showError(message, isOverflow) {
+    errorState = true;
+    operator = null;
+    previousValue = null;
+    resetNext = true;
+    currentDisplay.textContent = message;
+    previousDisplay.textContent = '';
+    // Setelah overflow, current value direset ke 0 agar perhitungan berikutnya bersih
+    currentValue = '0';
+  }
+
+  // ---------- Event listener tombol ----------
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.dataset.action;
+      const value = btn.dataset.value;
+
+      switch (action) {
+        case 'number':
+          inputNumber(value);
+          break;
+        case 'decimal':
+          inputDecimal();
+          break;
+        case 'operator':
+          chooseOperator(value);
+          break;
+        case 'equal':
+          calculate();
+          break;
+        case 'clear':
+          clearAll();
+          break;
+        case 'backspace':
+          backspace();
+          break;
+        case 'percent':
+          inputPercent();
+          break;
+      }
+    });
+  });
+
+  // ---------- Dukungan input keyboard ----------
+  document.addEventListener('keydown', (e) => {
+    if (e.key >= '0' && e.key <= '9') {
+      inputNumber(e.key);
+    } else if (e.key === '.') {
+      inputDecimal();
+    } else if (e.key === '+') {
+      chooseOperator('+');
+    } else if (e.key === '-') {
+      chooseOperator('−');
+    } else if (e.key === '*') {
+      chooseOperator('×');
+    } else if (e.key === '/') {
+      e.preventDefault(); // cegah aksi default browser (quick find)
+      chooseOperator('÷');
+    } else if (e.key === 'Enter' || e.key === '=') {
+      e.preventDefault();
+      calculate();
+    } else if (e.key === 'Backspace') {
+      backspace();
+    } else if (e.key === 'Escape') {
+      clearAll();
+    } else if (e.key === '%') {
+      inputPercent();
+    }
+  });
+
+  // Inisialisasi tampilan awal
+  updateDisplay();
+</script>
 
 </body>
 </html>
